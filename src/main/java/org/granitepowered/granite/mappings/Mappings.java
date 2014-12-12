@@ -223,12 +223,35 @@ public class Mappings {
         return null;
     }
 
+    public static CtField getCtField(CtClass clazz, String humanFieldName) {
+        try {
+            CtField ctField = ctFields.get(clazz).get(humanFieldName);
+
+            if (ctField == null && !clazz.getName().equals("java.lang.Object")) {
+                return getCtField(clazz.getSuperclass(), humanFieldName);
+            }
+
+            return ctField;
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static Field getField(String clazz, String humanFieldName) {
         return getField(getCtClass(clazz), humanFieldName);
     }
 
     public static Field getField(Class<?> clazz, String humanFieldName) {
         return getField(getCtClass(clazz), humanFieldName);
+    }
+
+    public static CtField getCtField(String clazz, String humanCtfieldName) {
+        return getCtField(getCtClass(clazz), humanCtfieldName);
+    }
+
+    public static CtField getCtField(Class<?> clazz, String humanCtfieldName) {
+        return getCtField(getCtClass(clazz), humanCtfieldName);
     }
 
     public static MethodHandle getMethod(CtClass clazz, String methodName) {

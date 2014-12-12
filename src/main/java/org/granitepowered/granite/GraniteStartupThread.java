@@ -24,8 +24,6 @@
 package org.granitepowered.granite;
 
 import com.github.kevinsawicki.http.HttpRequest;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.granitepowered.granite.bytecode.BytecodeMethodReplacerModification;
 import org.granitepowered.granite.bytecode.BytecodeModifier;
 import org.granitepowered.granite.impl.GraniteGameRegistry;
@@ -35,6 +33,7 @@ import org.granitepowered.granite.impl.text.chat.GraniteChatType;
 import org.granitepowered.granite.impl.text.format.GraniteTextColor;
 import org.granitepowered.granite.impl.text.format.GraniteTextStyle;
 import org.granitepowered.granite.mappings.Mappings;
+import org.granitepowered.granite.mixin.MixinManager;
 import org.granitepowered.granite.utils.ReflectionUtils;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.text.action.GraniteTextActionFactory;
@@ -158,6 +157,8 @@ public class GraniteStartupThread extends Thread {
         modifier.getModifications().add(new BytecodeMethodReplacerModification(Mappings.getCtMethod("MinecraftServer", "getServerModName"),
                 "return \"granite\";"
         ));
+
+        new MixinManager().inject();
 
         modifier.modify();
     }
